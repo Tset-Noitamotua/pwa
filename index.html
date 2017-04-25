@@ -23,6 +23,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weather PWA</title>
   <link rel="stylesheet" type="text/css" href="styles/inline.css">
+  <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+      #messages { margin-bottom: 40px }
+  </style>
 
   <!-- TODO add manifest here -->
   
@@ -31,7 +42,6 @@
 
   <header class="header">
     <h1 class="header__title">Weather PWA</h1>
-    <a href="chat.html">CHAT</a>
     <button id="butRefresh" class="headerButton" aria-label="Refresh"></button>
     <button id="butAdd" class="headerButton" aria-label="Add"></button>
   </header>
@@ -167,6 +177,31 @@
 
   <!-- Uncomment the line below when ready to test with fake data -->
   <!--<script src="scripts/app.js" async></script>-->
+  
+  <!-- CHAT CODE STARTS HERE -->
+  <div id=chat>
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>PUSH</button>
+    </form>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      $(function () {
+        var socket = io();
+        $('form').submit(function(){
+          socket.emit('chat message', $('#m').val());
+          $('#m').val('');
+          return false;
+        });
+        socket.on('chat message', function(msg){
+          $('#messages').append($('<li>').text(msg));
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+      });
+    </script>
+  </div>
+  <!-- CHAT CODE ENDS HERE ############################################# -->
 
 </body>
 </html>
